@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.city.erp.dao.IProductDao">
+
+	<!-- 基本的产品结果集映射 没有关联属性 -->
+	<resultMap id="ProductResultMap" type="Product">
+		<id property="no" column="PNO"/>
+		<result property="name" column="PNAME"/>
+		<result property="price" column="PRICE"/>
+		<result property="qty" column="QTY"/>
+	</resultMap>
+	
+	<!-- 使用自增量字段 语法 -->
+	<insert id="insert" keyProperty="no" keyColumn="PNO" useGeneratedKeys="true">
+	insert into erp_product (PNAME,PRICE,QTY) values(#{name},#{price},#{qty})
+	</insert>
+	
+	<update id="update" parameterType="Product">
+	update erp_product 
+		<set>
+			<if test="name!=null">PNAME=#{name},</if>
+			<if test="price!=null">PRICE=#{price},</if>
+			<if test="qty!=null">QTY=#{qty},</if>
+		</set>
+	where PNO=#{no}	
+	</update>
+	
+	<delete id="delete" parameterType="Product">
+	delete from erp_product where PNO=#{no}
+	</delete>
+	
+	<select id="selectById" parameterType="_int" resultMap="ProductResultMap">
+	select * from erp_product where PNO=#{no}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="ProductResultMap" useCache="true" flushCache="false">
+	select * from erp_product
+	</select>
+	
+</mapper>

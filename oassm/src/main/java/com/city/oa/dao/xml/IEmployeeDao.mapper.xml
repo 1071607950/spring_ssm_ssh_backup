@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.city.oa.dao.IEmployeeDao">
+
+	<resultMap  id="EmployeeResultMap" type="Employee">
+		<id property="id" column="EMPID" />
+		<result property="password" column="EMPPASSWORD"/>
+		<result property="name" column="EMPNAME"/>
+		<result property="sex" column="EMPSEX"/>
+		<result property="age" column="AGE"/>
+		<result property="salary" column="SALARY"/>
+		<result property="birthday" column="BIRTHDAY"/>
+		<result property="joinDate" column="JOINDATE"/>
+		<result property="photoFileName" column="PhotoFileName"/>
+		<result property="photoContentType" column="PhotoContentType"/>
+		
+	</resultMap>
+	<!-- 关联部门的员工结果映射  使用内嵌式select实现关联对象取得-->
+	<resultMap  id="EmployeeWithSelectDepartmentResultMap" type="Employee" extends="EmployeeResultMap">
+		<association property="department" javaType="Department" column="DEPTNO" select="com.city.oa.dao.IDepartmentDao.selectByNo"></association>
+	</resultMap>
+	<!-- 关联部门的员工结果映射  使用内嵌式ResultMap方式实现关联对象的取得-->
+	<resultMap  id="EmployeeWithMapDepartmentResultMap" type="Employee" extends="EmployeeResultMap">
+		<association property="department" resultMap="com.city.oa.dao.IDepartmentDao.DepartmentResultMap"></association>
+	</resultMap>
+	
+	<!-- 有图片的员工结果映射 -->
+	<resultMap  id="EmployeeWithPhotoResultMap" type="Employee" extends="EmployeeResultMap">
+		<result property="photo" column="PHOTO"/>		
+	</resultMap>
+	
+	
+	
+	
+	
+	
+	<!-- 关联部门的员工结果映射  使用内嵌式ResultMapq方式取得关联的部门，地址，联系信息，爱好集合-->
+	<resultMap  id="EmployeeWithMapDepartmentAddressContactInfoBehavesResultMap" type="Employee" extends="EmployeeResultMap">
+		<association property="department" resultMap="com.city.oa.dao.IDepartmentDao.DepartmentResultMap"></association>
+		<association property="address" resultMap="com.city.oa.dao.IAddressDao.AddressResultMap"></association>
+		<association property="contactInfo" resultMap="com.city.oa.dao.IContactInfoDao.ContactInfoResultMap"></association>
+	</resultMap>
+	
+	
+	
+	
+	<!-- 增加员工 无图片 -->
+	<insert id="insert" parameterType="Employee" >
+	insert into oa_employee (EMPID,DEPTNO,EMPPASSWORD,EMPNAME,EMPSEX,AGE,SALARY,BIRTHDAY,JOINDATE) 
+	values (#{id},#{department.no},#{password},#{name},#{sex},#{age},#{salary},#{birthday},#{joinDate})
+	</insert>
+	
+	<!-- 增加员工 有图片 -->
+	<insert id="insertWithPhoto" parameterType="Employee">
+	insert into oa_employee (EMPID,DEPTNO,EMPPASSWORD,EMPNAME,EMPSEX,AGE,SALARY,BIRTHDAY,JOINDATE,PHOTO,PHOTOCONTENTTYPE,PHOTOFILENAME) 
+	values (#{id},#{department.no},#{password},#{name},#{sex},#{age},#{salary},#{birthday},#{joinDate},#{photo},#{photoContentType},#{photoFileName})
+	</insert>
+	
+		
+	
+	<!-- 修改员工 无图片 -->
+	<update id="update" parameterType="Employee">
+	update oa_employee set DEPTNO=#{department.no},EMPPASSWORD=#{password},EMPNAME=#{name},
+	EMPSEX=#{sex},AGE=#{age},SALARY=#{salary},BIRTHDAY=#{birthday},JOINDATE=#{joinDate}
+	where EMPID=#{id}
+	</update>
+	
+	<!-- 修改员工有图片 -->
+	<update id="updateWithPhoto" parameterType="Employee">
+	update oa_employee set EMPPASSWORD=#{password},EMPNAME=#{name},
+	EMPSEX=#{sex},AGE=#{age},SALARY=#{salary},BIRTHDAY=#{birthday},JOINDATE=#{joinDate}
+	,PHOTO=#{photo},PhotoFileName=#{photoFileName},PhotoContentType=#{photoContentType}
+	where EMPID=#{id}
+	</update>
+	
+	<!-- 删除员工 -->
+	<delete id="delete" parameterType="Employee">
+	delete from oa_employee where EMPID=#{id}
+	</delete>
+	
+	
+	
+	
+	<!-- 取得指定的员工  不取关联的所有对象-->
+	<select id="selectById" parameterType="string" resultMap="EmployeeResultMap">
+	select * from oa_employee where EMPID=#{id}
+	</select>
+	
+	<!-- 取得指定的员工  不取关联的所有对象-->
+	<select id="selectByIdWithPhoto" parameterType="string" resultMap="EmployeeWithPhotoResultMap">
+	select * from oa_employee where EMPID=#{id}
+	</select>
+	
+	
+	<!-- 取得指定的员工  并取关联的部门对象-->
+	<select id="selectByIdWithDepartment" parameterType="string" resultMap="EmployeeWithMapDepartmentResultMap">
+	select a.*,b.* 
+	from oa_employee a inner join oa_department b on a.DEPTNO=b.DEPTNO 
+	where a.EMPID=#{id}
+	</select>
+	
+	
+	
+	<!-- 取得指定的员工  取关联的部门，地址，联系信息和爱好集合等关联对象-->
+	<select id="selectByIdWithDepartmentAndAddressAndContactInfoAndBehaves" parameterType="string" resultMap="EmployeeWithMapDepartmentResultMap">
+	select a.*,b.*,c.*,d.*,f.* from oa_employee a inner join oa_department b on a.deptno=b.deptno 
+	inner join oa_employeeaddress c on a.EMPID=c.EMPID 
+	inner join oa_employeecontactinfo d on a.EMPID=d.EMPID
+	inner join oa_employeebehave e on e.empid=e.empid
+	inner join oa_behave f on e.bno=f.bno
+	where a.EMPID=#{id}
+	</select>
+	
+	<!-- 取得所有的员工列表, 不抓取关联的部门对象 -->
+	<select id="selectListByAll" resultMap="EmployeeResultMap">
+	select * from oa_employee
+	</select>
+	
+	<!-- 取得所有的员工列表, 抓取关联的部门对象，演示关联查询的映射 -->
+	<select id="selectListByAllWithDepartment" resultMap="EmployeeWithMapDepartmentResultMap">
+	select a.*,b.* 
+	from oa_employee a inner join oa_department b on a.DEPTNO=b.DEPTNO 
+	</select>
+	
+	<!-- 取得指定部门的员工列表，不去关联的属性 -->
+	<select id="selectListByDepartment" parameterType="_int" resultMap="EmployeeResultMap">
+	select * from oa_employee where DEPTNO=#{departmentNo}
+	</select>
+	
+	<!-- 根据综合检索条件取得员工列表， 使用动态SQL机制 -->
+	<select id="selectListBySearchCondition" resultMap="EmployeeResultMap">
+	select *
+	from oa_employee
+	<where>
+		<if test="name!=null and name!=''">
+			and EMPNAME like #{name}
+		</if>
+		<if test="sex!=null and sex!=''">
+			and EMPSEX=#{sex}
+		</if>
+		<if test="minAge!=0">
+		  and AGE &gt;=#{minAge}  
+		</if>
+		<if test="maxAge!=0">
+		  and AGE &lt;= #{minAge}  
+		</if>
+		<if test="startJoinDate!=null">
+		  and JOINDATE &gt;=#{startJoinDate}  
+		</if>
+		<if test="endJoinDate!=null">
+		  and JOINDATE &lt;=  #{endJoinDate}  
+		</if>
+	</where>
+	</select>
+	
+	
+		
+	<!-- 取得有指定多个爱好的员工列表，爱好通过数组参数确定  -->
+	<select id="selectListByBehaves" resultMap="EmployeeResultMap">
+	select * from oa_employee 
+	where EMPID in (select EMPID 
+	                from oa_employeebehave 
+	                where BNO in  
+	                <foreach collection="behaves" item="behaveNo" open="(" separator="," close=")">
+	                  #{behaveNo}
+	                </foreach>
+	                )
+	</select>
+	
+	
+	<!-- =========================员工爱好管理========================================== -->
+	<!-- 为员工增加爱好， 单个 -->
+	<insert id="insertBehave">
+	insert into oa_employeebehave values (#{id},#{behaveNo})
+	</insert>
+	
+	<!-- 为员工增加爱好， 多个 -->
+	<insert id="insertBehaves">
+	insert into oa_employeebehave values 
+	<foreach collection="behaveNos" item="behaveNo" separator=",">
+	(#{id},#{behaveNo})
+	</foreach>
+	</insert>
+	
+	<!-- 删除指定员工的爱好 全部 -->
+	<delete id="deleteBehaves" parameterType="string">
+	delete from oa_employeebehave where EMPID=#{id}
+	</delete>
+	
+	
+	
+ 
+  
+</mapper>

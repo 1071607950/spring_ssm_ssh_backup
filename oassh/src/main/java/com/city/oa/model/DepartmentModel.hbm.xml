@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.city.oa.model">
+    <class name="DepartmentModel" table="OA_Department">
+        <id name="no" column="DEPTNO">
+           <generator class="identity" />
+           	
+        </id>
+        <property name="code" column="DEPTCODE"/>
+        <property name="name" column="DEPTNAME" update="true"/>
+        <!-- 一对多关联关系属性映射配置 -->
+        <set name="employees" table="oa_employee">
+        	<key column="DEPTNO" />
+        	<one-to-many class="EmployeeModel" />
+        </set>
+        
+    </class>
+</hibernate-mapping>
+

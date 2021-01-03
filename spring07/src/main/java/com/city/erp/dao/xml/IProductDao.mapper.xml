@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.city.erp.dao.IProductDao">
+
+	<resultMap id="ProductResultMap" type="Product">
+		<id property="no" column="PNO"/>
+		<result property="name" column="PNAME"/>
+		<result property="date" column="PDATE"/>
+		<result property="price" column="UNITPRICE"/>
+		<result property="qty" column="QTY"/>
+	</resultMap>
+	
+	<resultMap id="AreaResultMap" type="Area">
+		<id property="no" column="ANO"/>
+		<result property="name" column="ANAME"/>
+	</resultMap>
+
+	<!-- 关联区域集合属性的结果集映射,使用内嵌式resultMap方式取得关联属性,推荐此方式 -->
+	<resultMap id="ProductWithAreasUsingNestedResultMap" type="Area" extends="AreaResultMap">
+		<collection property="products" ofType="Product" resultMap="com.city.erp.dao.IProductDao.ProductResultMap"/>
+	</resultMap>
+	
+	<insert id="insert" keyProperty="no" keyColumn="PNO" useGeneratedKeys="true">
+	insert into erp_products (PNAME,PDATE,UNITPRICE,QTY) values(#{name},#{date},#{price},#{qty})
+	</insert>
+
+	<insert id="insertAreas">
+	insert IGNORE into erp_productarea values
+	<foreach collection="areas" item="area" separator=",">
+	(#{area},#{pno})
+	</foreach>
+	</insert>
+
+	<select id="selectAreaListByProduct" parameterType="_int" resultMap="ProductWithAreasUsingNestedResultMap">
+	select * from erp_areas a inner join erp_productArea pa on a.ano=pa.ano where pa.PNO=#{productNo}
+	
+	</select>
+	
+	<select id="selectProductListWithoutArea" resultMap="ProductResultMap">
+	select * from erp_products a where not exists (select * from erp_productarea b where b.PNO=a.PNO)
+	</select>
+
+</mapper>

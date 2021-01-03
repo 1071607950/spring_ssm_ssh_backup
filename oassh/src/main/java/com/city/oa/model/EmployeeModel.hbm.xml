@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- 员工Model类映射XML -->
+<hibernate-mapping  package="com.city.oa.model">
+    <class name="EmployeeModel" table="oa_employee" lazy="true">
+        <id name="id" column="EMPID">           
+       		<generator class="assigned" />
+        </id>
+        <property name="password" column="EMPPASSWORD"/>
+        <property name="name" column="EMPNAME"/>
+        <property name="sex" column="EMPSEX"/>
+        <property name="age" />
+        <property name="salary"/>
+        <property name="birthday"/>
+        <property name="joinDate"/>
+        <property name="photo" lazy="true"/>
+        <property name="cardcode" unique="true" />
+        <!-- 对部门的多对一关联 -->
+        <many-to-one name="department" column="DEPTNO" />
+        <!-- 多对对多关联关系属性映射配置 -->
+        <set name="behaves" table="oa_employeebehave">
+        	<key column="EMPID" />
+        	<many-to-many column="BNO" class="BehaveModel" />
+        </set>
+        <!-- 一对一关联映射  员工的地址Model类-->
+        <one-to-one name="address" class="AddressModel" cascade="all" />
+        <!-- 一对一关联映射  员工的联系方式Model类-->
+        <one-to-one name="contactInfo" class="ContactInfoModel" cascade="all" />
+    </class>
+</hibernate-mapping>

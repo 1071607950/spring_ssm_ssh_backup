@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- property 元素用于配置Hibernate中的属性   键:值   -->
+	    <!-- hibernate.connection.driver_class : 连接数据库的驱动  -->
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <!-- hibernate.connection.username : 连接数据库的用户名 -->
+        <property name="hibernate.connection.username">root</property>
+        <!-- hibernate.connection.password : 连接数据库的密码 -->
+        <property name="hibernate.connection.password">root</property>
+        <!-- hibernate.connection.url : 连接数据库的地址,路径 -->
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/cityoaapp?serverTimezone=Asia/Shanghai&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</property>
+        <!-- c3p0连接池 -->
+        <property name="hibernate.c3p0.max_size">10</property>
+        <property name="hibernate.c3p0.min_size">2</property>
+        <property name="hibernate.c3p0.timeout">4000</property>
+        <property name="hibernate.c3p0.max_statements">100</property>
+        <property name="hibernate.c3p0.idle_test_period">3000</property>
+        <property name="hibernate.c3p0.acquire_increment">2</property>
+        <property name="hibernate.c3p0.validate">false</property> 
+        <!-- 引入ORM 映射文件        填写src之后的路径         -->
+        <mapping class="com.city.oaapp.model.EmployeeModel" />
+    </session-factory>
+</hibernate-configuration>

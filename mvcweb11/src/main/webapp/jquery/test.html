@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="jquery.form.min.js"></script>
+<script type="text/javascript" src="main.js"></script>
+</head>
+<body>
+<h1>测试jQuery调用REST API</h1>
+<hr/>
+<div id="area01"></div>
+<hr/>
+<div id="area02"></div>
+<hr/>
+<div id="area03"></div>
+<hr/>
+<div id="area04"></div>
+<hr/>
+
+<div id="area05"></div>
+<hr/>
+<form id="departmentAddForm" action="../api/department/add.mvc" method="post" enctype="multipart/form-data" >
+部门编码:<input type="text" name="code" />
+部门名称:<input type="text" name="name" />
+<input type="submit" value="提交" >
+</form>
+
+
+
+</body>
+</html>

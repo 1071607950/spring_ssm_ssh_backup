@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.city.erp.dao.IProductDao">
+
+	<resultMap id="ProductResultMap" type="Product">
+		<id property="no" column="SSNO"/>
+		<result property="name" column="SNAME"/>
+		<result property="price" column="PRICE"/>
+		<result property="qty" column="QTY"/>
+		<result property="photoFileName" column="FILENAME"/>
+		<result property="photoContentType" column="CONTENTTYPE"/>
+	</resultMap>
+	
+	<resultMap  id="ProductWithPhotoResultMap" type="Product" extends="ProductResultMap">
+		<result property="photo" column="PHOTO"/>	
+	</resultMap>
+	
+	<insert id="insert">
+	insert into erp_product (SSNO,SNAME,PRICE,QTY,PHOTO,FILENAME,CONTENTTYPE) values(#{no},#{name},#{price},#{qty},#{photo},#{photoFileName},#{photoContentType})
+	</insert>
+	
+	<select id="selectById" parameterType="_int" resultMap="ProductResultMap">
+	select * from erp_product where SSNO=#{no}
+	</select>
+	
+	<select id="selectByIdWithPhoto" parameterType="_int" resultMap="ProductWithPhotoResultMap">
+	select * from erp_product where SSNO=#{no}
+	</select>
+	
+	<select id="selectListByPriceWithPage" resultMap="ProductResultMap">
+	select * from erp_product
+		<where>
+			<if test="low!=0">
+				and PRICE &gt;=#{low}
+			</if>
+			<if test="high!=0">
+				and PRICE &lt;=#{high}
+			</if>
+		</where>
+		limit #{start},#{rows}
+	</select>
+	
+	<select id="selectCountByPrice" resultType="_int">
+	select count(SSNO) from erp_product
+		<where>
+			<if test="low!=0">
+				and PRICE &gt;=#{low}
+			</if>
+			<if test="high!=0">
+				and PRICE &lt;=#{high}
+			</if>
+		</where>
+	</select>
+
+</mapper>

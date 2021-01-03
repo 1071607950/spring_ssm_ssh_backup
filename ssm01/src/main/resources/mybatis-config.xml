@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 属性定义 -->
+	<properties resource="mybatisconfig.properties">
+		<property name="maxnum" value="10"/>
+		<property name="minnum" value="1"/>
+	</properties>
+	
+	<!-- 全局参数配置 -->
+	<settings>
+		<setting name="cacheEnabled" value="true"/>
+		<setting name="useGeneratedKeys" value="true"/>
+		<setting name="logImpl" value="LOG4J"/>
+	</settings>
+	<!-- Model类别名配置 -->
+	<typeAliases>
+		<package name="com.city.erp.model"/>
+	</typeAliases>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+        <property name="defaultTransactionIsolationLevel" value="2"/>
+        <property name="defaultNetworkTimeout" value="2000"/>
+        <property name="driver.encoding" value="UTF8"/>
+        <property name="poolMaximumIdleConnections" value="1"/>
+        <property name="poolMaximumActiveConnections" value="1"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <!-- 指定映射信息的位置 -->
+  <mappers>
+    <mapper resource="com/city/erp/dao/xml/IProductDao.mapper.xml"/>
+  </mappers>
+</configuration>

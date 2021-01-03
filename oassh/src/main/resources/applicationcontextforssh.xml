@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:tx="http://www.springframework.org/schema/tx"
+xmlns:p="http://www.springframework.org/schema/p"
+xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+xmlns:util="http://www.springframework.org/schema/util"
+xmlns:jee="http://www.springframework.org/schema/jee"
+xmlns:aop="http://www.springframework.org/schema/aop"
+xsi:schemaLocation="
+http://www.springframework.org/schema/jdbc
+http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util.xsd
+http://www.springframework.org/schema/jee      
+http://www.springframework.org/schema/jee/spring-jee.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop.xsd" default-init-method="init" default-destroy-method="cleanup">
+
+	<!-- 主配置XML文件 -->
+	<!-- 扫描使用注解类配置的Bean  -->
+	<context:component-scan base-package="com.city.oa"></context:component-scan>
+	<!-- 启用AOP注解类 -->
+	<aop:aspectj-autoproxy />
+	<!-- 启用注解类事务处理 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<!-- Spring内置的连接池框架， 不推荐使用 -->
+	<bean id="dataSourceWithinSpring" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3319/cityoa"/>
+		<property name="username" value="cityoa"/>
+		<property name="password" value="cityoa"/>
+	</bean>
+	
+	<!-- 配置DataSource 使用DBCP 1框架 -->
+	<bean id="dataSourceWithDBCP" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3319/cityoa"/>
+		<property name="username" value="cityoa"/>
+		<property name="password" value="cityoa"/>
+	</bean>
+	<!-- 配置DataSource 使用DBCP2 框架 -->
+	<bean id="dataSourceWithDBCP2" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3319/cityoa" />
+		<property name="username" value="cityoa" />
+		<property name="password" value="cityoa" />
+		<!-- 连接初始值，连接池启动时创建的连接数量的初始值  默认值是0 -->
+		<property name="initialSize" value="1" />
+		<!-- 最小空闲值.当空闲的连接数少于阀值时，连接池就会预申请去一些连接，以免洪峰来时来不及申请  默认值是0 -->
+		<property name="minIdle" value="1" />
+		<!-- 最大空闲值.当经过一个高峰时间后，连接池可以慢慢将已经用不到的连接慢慢释放一部分，一直减少到maxIdle为止 ，0时无限制  默认值是8 -->
+		<property name="maxIdle" value="2" />
+		<!-- 连接池的最大值，同一时间可以从池分配的最多连接数量，0时无限制   默认值是8 -->
+		<property name="maxTotal" value="2" />
+	</bean>
+
+	<!-- 配置DataSource 使用C3P0框架 -->
+	<bean id="dataSourceWithC3P0"  class="com.mchange.v2.c3p0.ComboPooledDataSource"  destroy-method="close">  
+	    <property name="driverClass" value="com.mysql.jdbc.Driver"></property>  
+	    <property name="jdbcUrl" value="jdbc:mysql://localhost:3319/cityoa"></property>  
+	    <property name="user" value="cityoa"></property>  
+	    <property name="password" value="cityoa"></property>  
+	    <property name="acquireIncrement" value="2"></property>  
+	    <property name="initialPoolSize" value="1"></property>  
+	    <property name="maxPoolSize" value="3"></property>  
+	    <property name="minPoolSize" value="1"></property>  
+	    <property name="acquireRetryDelay" value="100"></property>  
+	    <property name="acquireRetryAttempts" value="10"></property>  
+	    <property name="breakAfterAcquireFailure" value="false"></property>  
+	</bean> 
+	
+	<!-- 配置SessionFactory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceWithC3P0"/>
+		<!-- 指定扫描的Model类的包 -->
+		<property name="packagesToScan">
+			<list>
+				<value>com.city.oa.model</value>
+				
+			</list>
+		</property>
+		<!-- 配置Hibernate属性 -->		
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.MySQLDialect
+				hibernate.show_sql=true				
+			</value>
+		</property>
+	</bean>
+	<!-- 配置Hibernate事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+</beans>
+
+
+

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.city.info.dao.IStudentDao">
+
+	<resultMap id="StudentResultMap" type="Student">
+		<id property="no" column="SSNO"/>
+		<result property="name" column="SNAME"/>
+		<result property="age" column="AGE"/>
+		<result property="sex" column="SEX"/>
+	</resultMap>
+	
+	<resultMap id="ClassResultMap" type="Class">
+		<id property="no" column="CLNO"/>
+		<result property="name" column="CLNAME"/>
+	</resultMap>
+	
+	<resultMap id="CourseResultMap" type="Course">
+		<id property="no" column="CNO"/>
+		<result property="name" column="CNAME"/>
+	</resultMap>
+	
+	<!-- 关联员工集合属性的结果集映射  使用内嵌是resultMap方式取得关联属性, 推荐此方式 -->
+	<resultMap id="StudentWithClassResultMap" type="Student" extends="StudentResultMap">
+		<association property="cla" resultMap="ClassResultMap"></association>
+	</resultMap>
+	
+	<!-- 关联员工集合属性的结果集映射  使用内嵌是resultMap方式取得关联属性, 推荐此方式 -->
+	<resultMap id="StudentWithCourseResultMap" type="Student" extends="StudentResultMap">
+	  <collection property="courses" ofType="Course" resultMap="CourseResultMap"/>
+	</resultMap>
+	
+	<resultMap id="StudentWithClassAndCourseResultMap" type="Student" extends="StudentResultMap">
+	  <association property="cla" resultMap="ClassResultMap"></association>
+	  <collection property="courses" ofType="Course" resultMap="CourseResultMap"/>
+	</resultMap>
+	
+	<!-- 使用自增量字段 语法 -->
+	<insert id="insert" keyProperty="no" keyColumn="SSNO" useGeneratedKeys="true">
+	insert into oa_student (SNAME,CLNO,AGE,SEX) values(#{name},#{cla.no},#{age},#{sex})
+	</insert>
+	
+	<insert id="insertCourse">
+	insert ignore into oa_studentcourse (SSNO,CNO) values 
+	<foreach collection="courseNos" item="courseNo" separator=",">
+	(#{studentNo},#{courseNo})
+	</foreach>
+	</insert>
+	
+	<select id="selectCoursesByStudent" parameterType="_int" resultMap="CourseResultMap">
+	select a.*,b.* from oa_studentcourse a inner join oa_course b on a.CNO=b.CNO 
+	where a.SSNO = #{studentNo}
+	</select>
+	
+	<select id="selectCoursesWithoutSelected" resultMap="CourseResultMap">
+	select a.* from oa_course a where not exists(select * from oa_studentcourse b where a.CNO=b.CNO)
+	</select>
+	
+	<select id="selectStudentCountBySexAndCourse" resultType="_int">
+	select count(a.SSNO) from oa_student a inner join oa_studentcourse b on a.SSNO=b.SSNO where sex=#{sex} and CNO=#{courseNo}
+	</select>
+	
+	<select id="selectListBySearchCondition" resultMap="StudentWithClassResultMap">
+	select a.*,b.* from oa_student a left join oa_class b on a.CLNO=b.CLNO
+		<where>
+			<if test="sex!=null and sex!=''">
+				and SEX=#{sex}
+			</if>
+			<if test="nameKeyword!=null and nameKeyword!=''">
+				and SNAME like "%"#{nameKeyword}"%"
+			</if>
+			<if test="lowAge!=0">
+				and AGE &gt;=#{lowAge}
+			</if>
+			<if test="highAge!=0">
+				and AGE &lt;=#{highAge}
+			</if>
+		</where>
+	</select>
+	<select id="selectListBySearchCondition01" resultMap="StudentWithClassAndCourseResultMap">
+	select * from oa_student s
+	left outer join oa_studentcourse sc on s.SSNO=sc.SSNO
+	left outer join oa_class cl on s.CLNO=cl.CLNO
+	left outer join oa_course co on sc.CNO=co.CNO
+		<where>
+			<if test="sex!=null and sex!=''">
+				and SEX=#{sex}
+			</if>
+			<if test="nameKeyword!=null and nameKeyword!=''">
+				and SNAME like "%"#{nameKeyword}"%"
+			</if>
+			<if test="lowAge!=0">
+				and AGE &gt;=#{lowAge}
+			</if>
+			<if test="highAge!=0">
+				and AGE &lt;=#{highAge}
+			</if>
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.city.oa.dao.IContactInfoDao">
+
+	<resultMap id="ContactInfoResultMap" type="ContactInfo">
+	  <id property="no" column="CINO" />
+	  <result property="mail" column="MAIL"/>
+	  <result property="mobile" column="MOBILE"/>
+	  <result property="qq" column="QQ"/>
+	</resultMap>
+	
+	<!-- 增加员工地址  -->
+	
+	<insert id="insert" parameterType="ContactInfo" keyProperty="no" keyColumn="CINO" useGeneratedKeys="true" >
+	insert into oa_employeecontactinfo  (EMPID,MAIL,MOBILE,QQ) 
+	values (#{employee.id},#{mail},#{mobile},#{qq})
+	</insert>
+	
+	<update id="update" parameterType="ContactInfo">
+	update oa_employeecontactinfo  set MAIL=#{mail},MOBILE=#{mobile},QQ=#{qq}  where EMPID=#{employee.id}
+	</update>
+	
+	<delete id="delete" parameterType="ContactInfo">
+	delete from oa_employeecontactinfo  where EMPID=#{employee.id}
+	</delete>
+	
+	<select id="selectById" parameterType="string" resultMap="ContactInfoResultMap" >
+	 select * from oa_employeecontactinfo   where EMPID=#{id}
+	</select>
+	
+	
+ 
+  
+</mapper>

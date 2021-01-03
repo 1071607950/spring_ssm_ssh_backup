@@ -1,0 +1,16 @@
+<Resource
+      name="mysql5015cityoa"
+      auth="Container"
+      type="javax.sql.DataSource" 
+      driverClassName="com.mysql.jdbc.Driver"
+      maxIdle="10"
+      maxWaitMillis="5000"
+      url="jdbc:mysql://localhost:5015/cityoa"
+      username="root"
+      password="root"
+      maxTotal="10"
+      removeAbandonedOnBorrow="true"
+      removeAbandonedOnMaintenance="true"
+      removeAbandonedTimeout="5"
+      logExpiredConnections="true"
+/>

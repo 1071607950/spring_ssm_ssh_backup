@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.city.oa.dao.IBehaveDao">
+
+	<resultMap id="BehaveResultMap" type="Behave">
+	  <id property="no" column="BNO" />
+	  <result property="code" column="BNAME"/>
+	</resultMap>
+	
+	
+	
+	<!-- 使用自增量字段 语法  -->
+	<insert id="insert" keyProperty="no" keyColumn="BNO" useGeneratedKeys="true" >
+	insert into oa_behave (BNAME) values (#{name})
+	</insert>
+	
+	<update id="update" parameterType="Behave">
+	update oa_behave set BNAME=#{name} where BNO=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="Behave">
+	delete from oa_behave where BNO=#{no}
+	</delete>
+	
+	<select id="selectByBo" parameterType="_int" resultMap="BehaveResultMap" >
+	 select * from oa_behave  where BNO=#{no}
+	</select>
+		
+	<select id="selectListByAll"  resultMap="BehaveResultMap" useCache="true" flushCache="false">
+	 select * from oa_behave	 
+	</select>
+	
+	<select id="selectListByAllWithPage"   resultMap="BehaveResultMap" >
+	 select * from oa_behave  limits #{start},#{rows}	 
+	</select>
+	
+	<!-- 取得部门的个数 -->
+	<select id="selectCountByAll" resultType="_int">
+	select count(BNO)  from oa_behave
+	</select>
+  
+</mapper>

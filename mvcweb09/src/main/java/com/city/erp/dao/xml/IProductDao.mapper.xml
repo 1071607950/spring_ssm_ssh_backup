@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.city.erp.dao.IProductDao">
+
+	<resultMap id="ProductResultMap" type="Product">
+		<id property="id" column="SSID"/>
+		<result property="name" column="SNAME"/>
+		<result property="price" column="PRICE"/>
+		<result property="date" column="PDATE"/>
+	</resultMap>
+	
+	<insert id="insert">
+	insert into erp_product1 (SSID,SNAME,PRICE,PDATE) values(#{id},#{name},#{price},#{date})
+	</insert>
+
+	<select id="selectListByPriceWithPage" resultMap="ProductResultMap">
+	select * from erp_product1 
+		<where>
+			<if test="low!=0">
+				and PRICE &gt;=#{low}
+			</if>
+			<if test="high!=0">
+				and PRICE &lt;=#{high}
+			</if>
+		</where>
+		limit #{start},#{rows}
+	</select>
+	
+	<select id="selectCountByPrice" resultType="_int">
+	select count(SSID) from erp_product1
+		<where>
+			<if test="low!=0">
+				and PRICE &gt;=#{low}
+			</if>
+			<if test="high!=0">
+				and PRICE &lt;=#{high}
+			</if>
+		</where>
+	</select>
+
+</mapper>

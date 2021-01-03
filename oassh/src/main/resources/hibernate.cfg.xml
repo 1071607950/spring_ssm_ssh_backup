@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+   <session-factory>
+   	
+   	<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <!-- hibernate.connection.username : 连接数据库的用户名 -->
+    <property name="hibernate.connection.username">cityoa</property>
+    <!-- hibernate.connection.password : 连接数据库的密码 -->
+    <property name="hibernate.connection.password">cityoa</property>
+    <!-- hibernate.connection.url : 连接数据库的地址,路径 -->
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3319/cityoa</property>
+	<property name="hibernate.c3p0.max_size">2</property>
+	<property name="hibernate.c3p0.min_size">1</property>
+	<property name="c3p0.timeout">4000</property>
+    <property name="show_sql">true</property>
+     
+    <!-- 数据库方言配置 -->
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <!-- 设置取得Model映射信息 -->
+   	<mapping class="com.city.oa.model.DepartmentModel"/>
+   	<mapping class="com.city.oa.model.EmployeeModel"/>
+   	<mapping class="com.city.oa.model.BehaveModel"/>
+   	<mapping class="com.city.oa.model.AddressModel"/>
+   	<mapping class="com.city.oa.model.ContactInfoModel"/>
+   	  
+   	 <!-- 启用XML配置 
+   	<mapping resource="com/city/oa/model/DepartmentModel.hbm.xml"/>
+    <mapping resource="com/city/oa/model/EmployeeModel.hbm.xml"/>
+    <mapping resource="com/city/oa/model/BehaveModel.hbm.xml"/>
+    <mapping resource="com/city/oa/model/AddressModel.hbm.xml"/>
+    <mapping resource="com/city/oa/model/ContactInfoModel.hbm.xml"/>
+    -->
+   
+   </session-factory>
+   
+   
+   
+</hibernate-configuration>   

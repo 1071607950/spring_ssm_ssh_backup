@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.city.info.dao.IStudentDao">
+
+	<!-- 基本的产品结果集映射 没有关联属性 -->
+	<resultMap id="StudentResultMap" type="Student">
+		<id property="no" column="SSNO"/>
+		<result property="name" column="SNAME"/>
+		<result property="cno" column="CNO"/>
+		<result property="age" column="AGE"/>
+		<result property="sex" column="SEX"/>
+	</resultMap>
+	
+	<!-- 使用自增量字段 语法 -->
+	<insert id="insert" keyProperty="no" keyColumn="SSNO" useGeneratedKeys="true">
+	insert into info_student (SNAME,CNO,AGE,SEX) values(#{name},#{cno},#{age},#{sex})
+	</insert>
+	
+	<select id="selectListByClass" parameterType="_int" resultMap="StudentResultMap">
+	select * from info_student where CNO = #{no}
+	</select>
+	
+	<select id="selectAvgAgeByClass" parameterType="_int"  resultType="_double">
+	select avg(AGE) from info_student where CNO = #{no}
+	</select>
+	
+	<select id="selectListByAll" resultMap="StudentResultMap">
+	select * from info_student
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="StudentResultMap">
+	select * from info_student limit #{start},#{rows}
+	</select>
+	
+	<select id="selectListByCondition" resultMap="StudentResultMap">
+	select * from info_student
+		<where>
+			<if test="classNo!=0">
+				and CNO=#{classNo}
+			</if>
+			<if test="sex!=null and sex!=''">
+				and SEX=#{sex}
+			</if>
+			<if test="lowAge!=0">
+				and AGE &gt;=#{lowAge}
+			</if>
+			<if test="highAge!=0">
+				and AGE &lt;=#{highAge}
+			</if>
+		</where>
+	</select>
+	<select id="selectAvgAgeByCondition" resultType="_double">
+	select avg(AGE) from info_student
+		<where>
+			<if test="classNo!=0">
+				and CNO=#{classNo}
+			</if>
+			<if test="sex!=null and sex!=''">
+				and SEX=#{sex}
+			</if>
+			<if test="lowAge!=0">
+				and AGE &gt;=#{lowAge}
+			</if>
+			<if test="highAge!=0">
+				and AGE &lt;=#{highAge}
+			</if>
+		</where>
+	</select>
+</mapper>

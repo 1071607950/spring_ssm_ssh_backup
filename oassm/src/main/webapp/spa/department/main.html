@@ -1,0 +1,51 @@
+
+<div class="box-header">
+    <div class="row">
+	    <div class="col-md-4">
+	      <h3>部门列表</h3>
+	    </div>
+	    <div class="col-md-8 text-right">
+	      <a ref="#" id="departmentAddLink" class="btn btn-default">增加</a>
+	      <a ref="#" id="departmentModidyLink" class="btn btn-default">修改</a>
+	      <a ref="#" id="departmentDeleteLink" class="btn btn-default">删除</a>
+	      <a ref="#" id="departmentViewLink" class="btn btn-default">查看</a>
+	    </div>
+     </div>
+     
+  </div>
+</div>
+<!-- /.box-header -->
+<div class="box-body">
+    <table id="DepartmentTable" class="table table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>编号</th>
+        <th>编码</th>
+        <th>名称</th>       
+      </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <div class="row">
+    	<div class="col-md-6">
+    	个数:<span id="Count"></span>	页数:<span id="Page"></span>/<span id="PageCount"></span>
+    	</div>
+	    <div class="col-md-6">
+		    <nav>
+			  <ul class="pagination justify-content-end">
+			    <li class="page-item"><a class="page-link" href="#">首页</a></li>
+			    <li class="page-item"><a class="page-link" href="#">上页</a></li>
+			    <li class="page-item"><a class="page-link" href="#">下页</a></li>
+			    <li class="page-item"><a class="page-link" href="#">末页</a></li>
+			  </ul>
+			</nav>
+	    </div>
+	    
+	</div>    
+    
+    
+  </div>
+  <!-- /.box-body -->
+</div>
+<script src="../department/main.js"></script>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.city.oa.dao.IDepartmentDao">
+
+	<!-- 基本的部门结果集映射 没有关联属性 -->
+	<resultMap id="DepartmentResultMap" type="Department">
+	  <id property="no" column="DEPTNO" />
+	  <result property="code" column="DEPTCODE" />
+	  <result property="name" column="DEPTNAME"/>
+	</resultMap>
+	
+	<!-- 关联员工集合属性的结果集映射  使用内嵌是select方式取得关联属性 -->
+	<resultMap id="DepartmentWithEmployeesUsingNestedSelectResultMap" type="Department" extends="DepartmentResultMap">
+	  <collection property="employees" ofType="Employee" column="DEPTNO" 
+	              select="com.city.oa.dao.IEmployeeDao.selectListByDepartment"	  />
+	</resultMap>
+	
+	<!-- 关联员工集合属性的结果集映射  使用内嵌是resultMap方式取得关联属性, 推荐此方式 -->
+	<resultMap id="DepartmentWithEmployeesUsingNestedResultMap" type="Department" extends="DepartmentResultMap">
+	  <collection property="employees" ofType="Employee" resultMap="com.city.oa.dao.IEmployeeDao.EmployeeResultMap"	  />
+	</resultMap>
+	
+	<!-- 使用自增量字段 语法  -->
+	<insert id="insert" keyProperty="no" keyColumn="DEPTNO" useGeneratedKeys="true" >
+	insert into oa_department (DEPTCODE,DEPTNAME) values (#{code},#{name})
+	</insert>
+	
+	
+	<!--  不使用自增量字段的配置 
+	<insert id="insert" parameterType="Department">
+		<selectKey keyProperty="no" resultType="_int" order="BEFORE" >
+		 select max(DEPTNO)+1 from oa_department
+		</selectKey>
+	
+	insert into oa_department (DEPTNO,DEPTCODE,DEPTNAME) values (#{no},#{code},#{name})
+	</insert>
+	-->
+	<!-- 修改部门，动态SQL set标记的使用 -->
+	<update id="update" parameterType="Department">
+	update oa_department 
+	<set>
+		<if test="code!=null and code!=''">
+		DEPTCODE=#{code},	
+		</if>
+		<if test="name!=null and name!=''">
+		DEPTNAME=#{name}, 
+		</if>
+	</set>
+	where DEPTNO=#{no}
+	</update>
+	
+	<delete id="delete" parameterType="Department">
+	delete from oa_department where DEPTNO=#{no}
+	</delete>
+	
+	<select id="selectByNo" parameterType="_int" resultMap="DepartmentResultMap" >
+	 select * from oa_department  where DEPTNO=#{no}
+	</select>
+	
+	
+	<!-- 取得指定的部门，并同时取得其关联的员工集合属性 -->
+	<select id="selectByNoWithEmployess" parameterType="_int" resultMap="DepartmentWithEmployeesUsingNestedResultMap">
+	  select a.*,b.*
+	  from oa_department a left outer join oa_employee b on a.DEPTNO=b.DEPTNO
+	  where a.DEPTNO=#{no}
+	</select>
+	
+		
+	<select id="selectListByAll"  resultMap="DepartmentResultMap" useCache="true" flushCache="false">
+	 select * from oa_department	 
+	</select>
+	
+	<select id="selectListByAllWithEmployees" resultMap="DepartmentWithEmployeesUsingNestedResultMap">
+	select a.*,b.*
+	from oa_department a left outer join oa_employee b on a.DEPTNO=b.DEPTNO
+	</select>
+	
+	<select id="selectListByAllWithPage"   resultMap="DepartmentResultMap" >
+	 select * from oa_department  limit #{start},#{rows}	 
+	</select>
+	
+	<!-- 取得部门的个数 -->
+	<select id="selectCountByAll" resultType="_int">
+	select count(DEPTNO)  from oa_department
+	</select>
+	
+	
+ 
+  
+</mapper>

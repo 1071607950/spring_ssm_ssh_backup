@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- 全局参数配置 -->
+	<settings>
+		<setting name="cacheEnabled" value="true"/>
+		<setting name="useGeneratedKeys" value="true"/>
+		<setting name="logImpl" value="LOG4J"/>
+	</settings>
+	<!-- Model类别名配置 -->
+	<typeAliases>
+		<package name="com.city.sales.model"/>
+	</typeAliases>
+  <environments default="productionOnServer">
+     <environment id="productionOnServer">
+      <transactionManager type="JDBC"/>
+      <dataSource type="JNDI">
+        <property name="data_source" value="java:comp/env/cityerpmybatis"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <!-- 指定映射信息的位置 -->
+  <mappers>
+    <mapper resource="com/city/sales/dao/xml/IOrderDao.mapper.xml"/>
+  </mappers>
+</configuration>

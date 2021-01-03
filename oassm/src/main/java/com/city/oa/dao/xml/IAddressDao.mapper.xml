@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.city.oa.dao.IAddressDao">
+
+	<resultMap id="AddressResultMap" type="Address">
+	  <id property="id" column="EMPID" />
+	  <result property="city" column="CITY"/>
+	  <result property="address" column="ADDRESS"/>
+	  <result property="postcode" column="POSTCODE"/>
+	</resultMap>
+	
+	<!-- 增加员工地址  -->
+	
+	<insert id="insert" parameterType="Address" >
+	insert into oa_employeeaddress (EMPID,CITY,ADDRESS,POSTCODE) 
+	values (#{employee.id},#{city},#{address},#{postcode})
+	</insert>
+	
+	<update id="update" parameterType="Address">
+	update oa_employeeaddress set CITY=#{city},ADDRESS=#{address},POSTCODE=#{postcode}  where EMPID=#{employee.id}
+	</update>
+	
+	<delete id="delete" parameterType="Address">
+	delete from oa_employeeaddress where EMPID=#{employee.id}
+	</delete>
+	
+	<select id="selectById" parameterType="string" resultMap="AddressResultMap" >
+	 select * from oa_employeeaddress  where EMPID=#{id}
+	</select>
+	
+	
+ 
+  
+</mapper>

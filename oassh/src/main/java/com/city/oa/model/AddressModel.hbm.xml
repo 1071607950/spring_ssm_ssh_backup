@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.city.oa.model">
+    <class name="AddressModel" table="oa_employeeaddress">
+        <id name="id" column="EMPID">
+          <generator class="foreign">
+          	<param name="property">employee</param>
+          </generator>
+        </id>
+        <property name="city" />
+        <property name="address" />
+        <property name="postcode" />
+        <!-- 一对一关联关系属性映射配置 -->
+        <one-to-one name="employee" class="EmployeeModel" constrained="true" />
+    </class>
+</hibernate-mapping>
+
