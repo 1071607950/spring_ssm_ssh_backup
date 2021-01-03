@@ -1,0 +1,67 @@
+<div class="row">
+	<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+		<div class="main-card mb-3 card">
+			<div class="card-header">
+				<div class="col-lg-3 col-md-3 col-sm-3 col-3 text-left card-title mt-3">
+					<h3>爱好列表</h3>
+				</div>
+				<div class="col-lg-9 col-md-9 col-sm-9 col-9 text-right text-light">
+					<a ref="#" id="BehaveAddLink" class="btn btn-primary">增加</a>
+					<a ref="#" id="BehaveModidyLink" class="btn btn-warning">修改</a>
+					<a ref="#" id="BehaveDeleteLink" class="btn btn-danger">删除</a>
+					<a ref="#" id="BehaveViewLink" class="btn btn-info">查看</a>
+				</div>
+			</div>
+			<div class="card-body">
+				<table id="BehaveTable" class="mb-3 table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>编号</th>
+							<th>编码</th>
+							<th>名称</th>
+						</tr>
+					</thead>
+					<tbody>
+						
+					</tbody>
+				</table>
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+						<ul class="pagination pagination-sm">
+							<li class="page-item">
+								<span class="page-link">个数:</span>
+							</li>
+							<li class="page-item">
+								<span id="Count" class="page-number page-link">0</span>
+							</li>
+							<li class="page-item">
+								<span class="page-link">页数:</span>
+							</li>
+							<li class="page-item">
+								<span id="Page" class="page-number page-link">0</span>
+							</li>
+							<li class="page-item">
+								<span class="page-number page-link">/</span>
+							</li>
+							<li class="page-item">
+								<span id="PageCount" class="page-number page-link">0</span>
+							</li>
+						</ul>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+						<nav>
+							<ul class="pagination justify-content-end">
+								<li class="page-item"><a class="page-link" href="#">首页</a></li>
+								<li class="page-item"><a class="page-link" href="#">上页</a></li>
+								<li class="page-item"><a class="page-link" href="#">下页</a></li>
+								<li class="page-item"><a class="page-link" href="#">末页</a></li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="BehaveDialog" style="background-color: #EEE"></div>
+<script src="behave/main.js"></script>
