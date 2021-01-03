@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .div1{
+            width: 500px;
+            height: 100px;
+            margin: 200px auto;
+        }
+    </style>
+</head>
+<body>
+    <form th:action="@{/addCus}">
+        <div class="div1">
+            请输入身份证图片名称：<input type="text" name="imgName" required>
+            <input type="submit" value="提交">
+        </div>
+    </form>
+</body>
+</html>

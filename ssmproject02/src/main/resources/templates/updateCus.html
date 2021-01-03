@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .div1{
+            width: 300px;
+            height: 500px;
+            margin: 200px auto;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" th:action="@{/modifyCus}">
+        <div class="div1">
+            <table border="1">
+                <tr>
+                    <td>序号</td>
+                    <td><input name="id" type="text" th:value="${customer.getId()}" required readonly></td>
+                </tr>
+                <tr>
+                    <td>姓名</td>
+                    <td><input name="truename" type="text" th:value="${customer.getTruename()}" required></td>
+                </tr>
+                <tr>
+                    <td>性别</td>
+                    <td><input name="gender" type="text" th:value="${customer.getGender()}" required></td>
+                </tr>
+                <tr>
+                    <td>民族</td>
+                    <td><input name="nation" type="text" th:value="${customer.getNation()}" required></td>
+                </tr>
+                <tr>
+                    <td>出生日期</td>
+                    <td><input name="birth" type="text" th:value="${customer.getBirth()}" required></td>
+                </tr>
+                <tr>
+                    <td>家庭住址</td>
+                    <td><input name="address" type="text" th:value="${customer.getAddress()}" required></td>
+                </tr>
+                <tr>
+                    <td>身份号码</td>
+                    <td>
+                        <input name="identify" type="text" th:value="${customer.getIdentify()}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" value="提交">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</body>
+</html>
